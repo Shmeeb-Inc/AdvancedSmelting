@@ -33,21 +33,21 @@ public class CommandHandler implements org.bukkit.command.CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String s, String[] args) {
 
         if (cmd.getName().equalsIgnoreCase("smelt")) {
-            if(args.length == 0) {
-                if(sender instanceof Player){
+            if (args.length == 0) {
+                if (sender instanceof Player){
                     final CommandExecutor command = commands.get("smelt");
                         if (command.getPermission() != null && !sender.hasPermission(command.getPermission())) {
                             sender.sendMessage(Core.getInstance().getProperties().getMessages().getNoPermission());
                             return true;
                         }
-                        command.execute(sender,args);
+                        command.execute(sender, args);
                         return true;
 
-                }else{
+                } else {
                     sender.sendMessage(Core.getInstance().getProperties().getMessages().getPlayerCommand());
                     return true;
                 }
-            }else{
+            } else {
                 //This code is not currently used, but may need it in the future
                 String name = args[0].toLowerCase();
                 if (commands.containsKey(name)) {

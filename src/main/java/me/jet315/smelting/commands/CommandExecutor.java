@@ -12,7 +12,7 @@ public abstract class CommandExecutor {
 
     public abstract void execute(CommandSender sender, String[] args);
 
-    public void setBoth(){
+    public void setBoth() {
         this.player = true;
         this.console = true;
     }

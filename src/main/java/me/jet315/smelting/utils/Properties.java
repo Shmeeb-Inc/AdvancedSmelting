@@ -62,7 +62,7 @@ public class Properties {
         loadConfig();
     }
 
-    private void loadConfig(){
+    private void loadConfig() {
         createConfig();
         FileConfiguration config = instance.getConfig();
         isActionBarEnabled = config.getBoolean("EnableActionBar");
@@ -94,7 +94,7 @@ public class Properties {
 
     }
 
-    private void createConfig(){
+    private void createConfig() {
         try {
             if (!instance.getDataFolder().exists()) {
                 Core.getInstance().getDataFolder().mkdirs();

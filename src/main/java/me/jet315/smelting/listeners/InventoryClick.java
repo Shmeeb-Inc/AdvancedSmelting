@@ -19,8 +19,8 @@ public class InventoryClick implements Listener{
     @EventHandler
     public void onClick(InventoryClickEvent e){
         //Check if moving to the Smelting inventory
-        if(e.getClickedInventory() ==  null) return;
-        if(Core.getInstance().getSmeltingGUI().isSmeltingInventory(e.getInventory())){
+        if (e.getClickedInventory() == null) return;
+        if (Core.getInstance().getSmeltingGUI().isSmeltingInventory(e.getInventory())) {
             Player p = (Player) e.getWhoClicked();
             int getLastSlot = e.getInventory().getSize()-1;
             if(e.getCurrentItem() != null && e.getSlot() == getLastSlot){
@@ -67,4 +67,5 @@ public class InventoryClick implements Listener{
             }
         },10L);
     }
+
 }

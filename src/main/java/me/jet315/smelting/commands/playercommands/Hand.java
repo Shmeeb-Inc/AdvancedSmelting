@@ -31,7 +31,7 @@ public class Hand extends CommandExecutor {
         Player player = (Player) sender;
 
         //Check if player is already smelting
-        if(Core.getInstance().getSmeltManager().getActivelySmelting().containsKey(player)){
+        if (Core.getInstance().getSmeltManager().getActivelySmelting().containsKey(player)) {
             player.sendMessage(Core.getInstance().getProperties().getMessages().getAlreadySmeltingMessage());
             return;
         }
@@ -39,7 +39,7 @@ public class Hand extends CommandExecutor {
         ArrayList<ItemStack> itemsToSmelt = new ArrayList<>();
         itemsToSmelt.add(player.getInventory().getItemInHand().clone());
         player.getInventory().getItemInHand().setAmount(0);
-        Core.getInstance().getSmeltManager().smeltItems(player,itemsToSmelt, SmeltingType.HAND);
+        Core.getInstance().getSmeltManager().smeltItems(player, itemsToSmelt, SmeltingType.HAND);
 
     }
 }

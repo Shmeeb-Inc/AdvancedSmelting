@@ -34,15 +34,15 @@ public class All extends CommandExecutor {
 
         //Smelt items in inventory
         ArrayList<ItemStack> itemsToSmelt = new ArrayList<>();
-        for(ItemStack item : player.getInventory().getContents()){
-            if(Utils.getSmeltedItemStack(item) != null){
+        for (ItemStack item : player.getInventory().getContents()) {
+            if (Utils.getSmeltedItemStack(item) != null) {
                 itemsToSmelt.add(item);
                 player.getInventory().remove(item);
 
             }
         }
         //Smelt items
-        Core.getInstance().getSmeltManager().smeltItems(player,itemsToSmelt, SmeltingType.ALL);
+        Core.getInstance().getSmeltManager().smeltItems(player, itemsToSmelt, SmeltingType.ALL);
 
     }
 

@@ -19,7 +19,7 @@ public class Utils {
      * @return The smelted itemStack, returns null if invalid item
      */
     public static ItemStack getSmeltedItemStack(ItemStack itemStack) {
-        if(itemStack == null) return null;
+        if (itemStack == null) return null;
         Material rawMaterial = itemStack.getType();
         switch (rawMaterial) {
             case PORK: {
@@ -123,14 +123,14 @@ public class Utils {
      * @param items Each item in the inventory
      * @return Four Doubles, Money[0], Coal[1], EXP[2],time[3] in the format #.##
      */
-    public static String[] calcInveotryCosts(ItemStack[] items){
+    public static String[] calcInveotryCosts(ItemStack[] items) {
         DecimalFormat df = new DecimalFormat("#.##");
         DecimalFormat timeDF = new DecimalFormat("#.#");
         String[] costs = new String[4];
         ArrayList<ItemStack> validItemsInInventory = new ArrayList<>();
-        for(ItemStack item : items){
-            if(item != null){
-                if(getSmeltedItemStack(item) != null){
+        for (ItemStack item : items) {
+            if (item != null) {
+                if (getSmeltedItemStack(item) != null) {
                     validItemsInInventory.add(item);
                 }
             }
@@ -139,7 +139,7 @@ public class Utils {
         double coalCost = 0;
         double expGained = 0;
         double time = 0;
-        for(ItemStack validItem : validItemsInInventory){
+        for (ItemStack validItem : validItemsInInventory) {
             SmeltableItem smeltableItem = Core.getInstance().getSmeltManager().getSmeltableItems().get(validItem.getType());
             moneyCost += smeltableItem.getCostOfMoneyToSmelt() * validItem.getAmount();
             coalCost += smeltableItem.getCostOfCoalToSmelt() * validItem.getAmount();

@@ -123,8 +123,7 @@ public class Core extends JavaPlugin {
         return smeltManager;
     }
 
-    private boolean setupEconomy()
-    {
+    private boolean setupEconomy() {
        try {
            RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(Economy.class);
            if (economyProvider != null) {
@@ -132,8 +131,8 @@ public class Core extends JavaPlugin {
            }
 
            return (economy != null);
-       }catch(NoClassDefFoundError e){
-        return false;
+       } catch(NoClassDefFoundError e)  {
+           return false;
        }
     }
 

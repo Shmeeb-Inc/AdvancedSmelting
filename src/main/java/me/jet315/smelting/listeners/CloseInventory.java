@@ -16,15 +16,15 @@ public class CloseInventory implements Listener{
     //Check if inventory is a smelting inventory (May need to do this on quit too)
 
     @EventHandler
-    public void onInventoryClose(InventoryCloseEvent e){
+    public void onInventoryClose(InventoryCloseEvent e) {
         Inventory inventory = e.getInventory();
-        if(Core.getInstance().getSmeltingGUI().isSmeltingInventory(inventory)){
-            if(Core.getInstance().getSmeltManager().getActivelySmelting().containsKey(e.getPlayer())) return;
+        if (Core.getInstance().getSmeltingGUI().isSmeltingInventory(inventory)) {
+            if (Core.getInstance().getSmeltManager().getActivelySmelting().containsKey(e.getPlayer())) return;
             inventory.setItem(inventory.getSize()-1,null);
             ItemStack[] contents = inventory.getContents();
 
-            for(ItemStack itemStack : contents){
-                if(itemStack == null) continue;
+            for (ItemStack itemStack : contents) {
+                if (itemStack == null) continue;
                 ItemStack item = new ItemStack(itemStack);
                 itemStack.setAmount(0);
                 e.getPlayer().getInventory().addItem(item);

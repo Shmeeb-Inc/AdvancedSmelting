@@ -24,7 +24,7 @@ public class SmeltingGUI {
      * @param inventorySize The size of the inventory
      * @param inventoryName The name of the inventory
      */
-    public SmeltingGUI(int inventorySize, String inventoryName){
+    public SmeltingGUI(int inventorySize, String inventoryName) {
         this.inventorySize = inventorySize;
         this.inventoryName = inventoryName;
     }

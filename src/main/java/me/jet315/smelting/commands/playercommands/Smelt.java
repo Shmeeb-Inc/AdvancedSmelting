@@ -35,12 +35,12 @@ public class Smelt extends CommandExecutor {
         Player player = (Player) sender;
 
         //Check if player is already smelting
-        if(Core.getInstance().getSmeltManager().getActivelySmelting().containsKey(player)){
+        if (Core.getInstance().getSmeltManager().getActivelySmelting().containsKey(player)){
             player.sendMessage(Core.getInstance().getProperties().getMessages().getAlreadySmeltingMessage());
             return;
         }
 
-        if(Core.getInstance().getProperties().isInventoryEnabled()){
+        if (Core.getInstance().getProperties().isInventoryEnabled()) {
 
             //call event
             SmeltingInventoryOpenEvent smeltingInventoryOpenEvent = new SmeltingInventoryOpenEvent(player);
@@ -56,7 +56,7 @@ public class Smelt extends CommandExecutor {
             meta.setDisplayName(title.replaceAll("%MONEY%","0").replaceAll("%COAL%","0").replaceAll("%EXP","0").replaceAll("%TIME%","0"));
             //Lore
             ArrayList<String> lore = new ArrayList<>();
-            for(String s : Core.getInstance().getProperties().getMessages().getItemConfirmLore()){
+            for (String s : Core.getInstance().getProperties().getMessages().getItemConfirmLore()) {
                 String formatted = s.replaceAll("%MONEY%","0").replaceAll("%COAL%","0").replaceAll("%EXP%","0").replaceAll("%TIME%","0");
                 lore.add(formatted);
             }
@@ -69,18 +69,18 @@ public class Smelt extends CommandExecutor {
             //Add to inventory viewer list
             Core.getInstance().getSmeltingGUI().getPlayersInGUI().add(player);
 
-        }else{
+        } else {
             //Smelt items in inventory
             ArrayList<ItemStack> itemsToSmelt = new ArrayList<>();
-            for(ItemStack item : player.getInventory().getContents()){
-                if(Utils.getSmeltedItemStack(item) != null){
+            for (ItemStack item : player.getInventory().getContents()) {
+                if (Utils.getSmeltedItemStack(item) != null) {
                     itemsToSmelt.add(item);
                     player.getInventory().remove(item);
 
                 }
             }
             //Smelt items
-            Core.getInstance().getSmeltManager().smeltItems(player,itemsToSmelt, SmeltingType.ALL);
+            Core.getInstance().getSmeltManager().smeltItems(player, itemsToSmelt, SmeltingType.ALL);
         }
     }
 

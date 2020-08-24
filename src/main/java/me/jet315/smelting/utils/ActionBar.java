@@ -100,11 +100,12 @@ public class ActionBar {
         }
     }
 
-    private static String getBars(int numberOfBars, ChatColor color){
+    private static String getBars(int numberOfBars, ChatColor color) {
         StringBuilder stringBuilder = new StringBuilder();
-        for(int i = 0; i < numberOfBars;i++){
+        for (int i = 0; i < numberOfBars;i++) {
             stringBuilder.append(color + "▉");
         }
         return stringBuilder.toString();
     }
+
 }
