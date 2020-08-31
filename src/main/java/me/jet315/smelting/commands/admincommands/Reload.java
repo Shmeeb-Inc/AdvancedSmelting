@@ -26,7 +26,7 @@ public class Reload extends CommandExecutor {
         //start time, stuff, test
         long startTime = System.currentTimeMillis();
         Core.getInstance().reloadPlugin();
-        sender.sendMessage(ChatColor.GREEN +"Reload Complete! " + String.valueOf(System.currentTimeMillis()-startTime)+ "ms");
+        sender.sendMessage(ChatColor.GREEN + "Reload Complete! " + (System.currentTimeMillis() - startTime) + "ms");
 
     }
 

@@ -20,11 +20,11 @@ public class ActionBar {
         if (!player.isOnline()) {
             return; // Player may have logged out
         }
-        int numberOfGreenBars = (int) ((value+0.5)/10);
-        int numberOfRedBars = 10-numberOfGreenBars;
+        int numberOfGreenBars = (int) ((value + 0.5) / 10);
+        int numberOfRedBars = 10 - numberOfGreenBars;
 
 
-        String message = Core.getInstance().getProperties().getMessages().getActionBarMessage().replaceAll("%GREENBARS%",getBars(numberOfGreenBars,ChatColor.GREEN) +ChatColor.RED).replaceAll("%REDBARS%",getBars(numberOfRedBars,ChatColor.RED)).replaceAll("%PERCENTAGE%",String.valueOf(value));
+        String message = Core.getInstance().getProperties().getMessages().getActionBarMessage().replaceAll("%GREENBARS%", getBars(numberOfGreenBars, ChatColor.GREEN) + ChatColor.RED).replaceAll("%REDBARS%", getBars(numberOfRedBars, ChatColor.RED)).replaceAll("%PERCENTAGE%", String.valueOf(value));
         if (nmsver.startsWith("v1_12_")) {
             sendActionBarPost112(player, message);
         } else {
@@ -102,7 +102,7 @@ public class ActionBar {
 
     private static String getBars(int numberOfBars, ChatColor color) {
         StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < numberOfBars;i++) {
+        for (int i = 0; i < numberOfBars; i++) {
             stringBuilder.append(color + "▉");
         }
         return stringBuilder.toString();

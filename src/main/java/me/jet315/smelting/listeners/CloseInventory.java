@@ -7,20 +7,19 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-public class CloseInventory implements Listener{
+public class CloseInventory implements Listener {
 
     /**
      * Listens to when a player closes an inventory - Not currently in use
      */
 
     //Check if inventory is a smelting inventory (May need to do this on quit too)
-
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent e) {
         Inventory inventory = e.getInventory();
         if (Core.getInstance().getSmeltingGUI().isSmeltingInventory(inventory)) {
             if (Core.getInstance().getSmeltManager().getActivelySmelting().containsKey(e.getPlayer())) return;
-            inventory.setItem(inventory.getSize()-1,null);
+            inventory.setItem(inventory.getSize() - 1, null);
             ItemStack[] contents = inventory.getContents();
 
             for (ItemStack itemStack : contents) {

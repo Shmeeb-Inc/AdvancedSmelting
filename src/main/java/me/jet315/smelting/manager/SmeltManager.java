@@ -104,12 +104,12 @@ public class SmeltManager {
         }
 
         //Null items will be given back automatically, as they wont be added to the smelting list
-        if (validItems.size() == 0){
-            if(type == SmeltingType.INVENTORY) {
+        if (validItems.size() == 0) {
+            if (type == SmeltingType.INVENTORY) {
                 p.sendMessage(Core.getInstance().getProperties().getMessages().getNoItemInGUIMessage());
             }
-            if(type == SmeltingType.HAND){
-                for(ItemStack item : nullItems){
+            if (type == SmeltingType.HAND) {
+                for (ItemStack item : nullItems) {
                     p.getInventory().addItem(item);
                 }
             }
@@ -186,7 +186,6 @@ public class SmeltManager {
 
     //Work out how many items I can smelt in one coal, put coal leftover into a varible to use next time
     //Pass these items into a async method, which then after the time specified, calls  back to a sync method with an array of items to give
-
     private void startClock() {
         Bukkit.getScheduler().scheduleSyncRepeatingTask(Core.getInstance(), () -> {
             //Iterate through the keyset
@@ -272,29 +271,29 @@ public class SmeltManager {
 
                 delayItems(p, numberOfMillisecondsToWait, validItemsToSmelt, (int) (coal + 0.99), moneyToCharge, expToGive);
             }
-        },0L, refreshRate); //Change refresh rate,probably no need to have config
+        }, 0L, refreshRate); //Change refresh rate,probably no need to have config
     }
 
     //Takes the player, seconds to wait, and items that are needed to be smelted
-    private void delayItems(Player p, int millisecondsDelay, ArrayList<ItemStack> itemsToSmelt, int coalToTake,double priceToCharge,double expToGive){
+    private void delayItems(Player p, int millisecondsDelay, ArrayList<ItemStack> itemsToSmelt, int coalToTake, double priceToCharge, double expToGive) {
         Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getInstance(), new Runnable() {
             @Override
             public void run() {
-                giveItems(p,itemsToSmelt,coalToTake,priceToCharge,expToGive,millisecondsDelay);
+                giveItems(p, itemsToSmelt, coalToTake, priceToCharge, expToGive, millisecondsDelay);
                 updateActionBar(p);
             }
-        },millisecondsDelay/50);
+        }, millisecondsDelay / 50);
     }
 
     //Gives the player a list of (smelted) items, and takes coal & money from the player
-    private void giveItems(Player p, ArrayList<ItemStack> itemsToSmelt, int coalToTake,double priceToCharge,double expToGive,int numberOfMillisecondsToWait){
+    private void giveItems(Player p, ArrayList<ItemStack> itemsToSmelt, int coalToTake, double priceToCharge, double expToGive, int numberOfMillisecondsToWait) {
         Bukkit.getScheduler().runTask(Core.getInstance(), new Runnable() {
             @Override
             public void run() {
 
                 //If player does not have the coal or money anymore, give itemsToSmelt back & raw list
                 //update seconds completed
-                if(!p.isOnline()){
+                if (!p.isOnline()) {
                     activelySmelting.remove(p);
                     return;
                 }
@@ -305,7 +304,7 @@ public class SmeltManager {
                         //Has moved, cancel task
                         activelySmelting.remove(p);
                         p.sendMessage(Core.getInstance().getProperties().getMessages().getMoveCancelMessage());
-                        refundItems(p,smeltPlayer.getRawList());
+                        refundItems(p, smeltPlayer.getRawList());
                         return;
 
                     }
@@ -319,9 +318,9 @@ public class SmeltManager {
                         playersCoal += itemInInventory.getAmount();
                     }
                 }
-                if(playersCoal < coalToTake){
-                    p.sendMessage(Core.getInstance().getProperties().getMessages().getNotEnoughCoal().replaceAll("%DIFFERENCE%", String.valueOf( coalToTake - playersCoal)));
-                    refundItems(p,smeltPlayer.getRawList());
+                if (playersCoal < coalToTake) {
+                    p.sendMessage(Core.getInstance().getProperties().getMessages().getNotEnoughCoal().replaceAll("%DIFFERENCE%", String.valueOf(coalToTake - playersCoal)));
+                    refundItems(p, smeltPlayer.getRawList());
                     activelySmelting.remove(p);
                     return;
                 }
@@ -333,15 +332,15 @@ public class SmeltManager {
                         //remove from list,message, continue
                         p.sendMessage(Core.getInstance().getProperties().getMessages().getNotEnoughMoney().replaceAll("%DIFFERNCE%", String.valueOf((int) Core.economy.getBalance(p) - priceToCharge)));
                         //give unsmelted items back
-                        refundItems(p,smeltPlayer.getRawList());
+                        refundItems(p, smeltPlayer.getRawList());
                         activelySmelting.remove(p);
                         return;
                     }
                 }
                 //Update timer
-                smeltPlayer.setTimeCompleted(smeltPlayer.getTimeCompleted()+ numberOfMillisecondsToWait);
+                smeltPlayer.setTimeCompleted(smeltPlayer.getTimeCompleted() + numberOfMillisecondsToWait);
                 //Remove coal
-                p.getInventory().removeItem(new ItemStack(Material.COAL,coalToTake));
+                p.getInventory().removeItem(new ItemStack(Material.COAL, coalToTake));
 
                 //Give EXP
                 p.giveExp((int) (expToGive + 0.5));
@@ -350,15 +349,16 @@ public class SmeltManager {
                 if (Core.economy != null) Core.economy.withdrawPlayer(p, priceToCharge);
                 //Remove from main array, add the smelted items to the player
 
-                for(ItemStack itemStack : itemsToSmelt){
+                for (ItemStack itemStack : itemsToSmelt) {
                     //This bit of code removes the item that is about to be smelted, from the taw list
-                    INNER:for(ItemStack item : smeltPlayer.getRawList()){
-                        if(item.getType() == itemStack.getType()){
+                    INNER:
+                    for (ItemStack item : smeltPlayer.getRawList()) {
+                        if (item.getType() == itemStack.getType()) {
                             int amountInRawList = item.getAmount();
-                            if(amountInRawList > itemStack.getAmount()){
-                                item.setAmount(amountInRawList-itemStack.getAmount());
+                            if (amountInRawList > itemStack.getAmount()) {
+                                item.setAmount(amountInRawList - itemStack.getAmount());
                                 break INNER;
-                            }else{
+                            } else {
                                 smeltPlayer.getRawList().remove(item);
                                 break INNER;
                             }
@@ -368,7 +368,7 @@ public class SmeltManager {
 
                 }
 
-                if(smeltPlayer.getRawList().size() == 0){
+                if (smeltPlayer.getRawList().size() == 0) {
                     activelySmelting.remove(p);
                     p.sendMessage(Core.getInstance().getProperties().getMessages().getSmeltCompletedMessage().replaceAll("%COAL%", String.valueOf(smeltPlayer.getTotalCoalNeeded())).replaceAll("%MONEY%", String.valueOf(smeltPlayer.getTotalMoneyNeeded())));
 
@@ -378,22 +378,23 @@ public class SmeltManager {
             }
         });
     }
+
     //Updates the action bar for the particular player
-    private void updateActionBar(Player p){
+    private void updateActionBar(Player p) {
         Bukkit.getScheduler().runTask(Core.getInstance(), new Runnable() {
             @Override
             public void run() {
                 SmeltPlayer smeltPlayer = activelySmelting.get(p);
-                if(smeltPlayer == null){
-                    ActionBar.sendActionBarPercentage(p,100);
+                if (smeltPlayer == null) {
+                    ActionBar.sendActionBarPercentage(p, 100);
                     return;
                 }
-                ActionBar.sendActionBarPercentage(p,(int) (((float) ((smeltPlayer.getTimeCompleted() * 100) / smeltPlayer.getTimeToComplete()))+0.5));
+                ActionBar.sendActionBarPercentage(p, (int) (((float) ((smeltPlayer.getTimeCompleted() * 100) / smeltPlayer.getTimeToComplete())) + 0.5));
             }
         });
     }
 
-    private void refundItems(Player p,ArrayList<ItemStack> remainingItems){
+    private void refundItems(Player p, ArrayList<ItemStack> remainingItems) {
         Bukkit.getScheduler().runTask(Core.getInstance(), new Runnable() {
             @Override
             public void run() {
@@ -408,6 +409,7 @@ public class SmeltManager {
 
     /**
      * Old, messy, semi working code. Just left it here for reference - Not in use
+     *
      * @param instance
      */
     @Deprecated
@@ -438,7 +440,7 @@ public class SmeltManager {
                         }
                     }
 
-                   // int timeInMilis = milisInRefreshRate + smeltPlayer.getMilisLeftOver();
+                    // int timeInMilis = milisInRefreshRate + smeltPlayer.getMilisLeftOver();
                     //System.out.println("Start refresh rate =  " + timeInMilis);
                     double coalNeeded = -(smeltPlayer.getCoalLeftOver());
                     double moneyNeeded = 0;
@@ -463,7 +465,7 @@ public class SmeltManager {
                             //reduce the time in milis, reduce item amount, add to number of items processed
                             item.setAmount(item.getAmount() - 1);
 
-                           // timeInMilis -= smeltableItem.getTimeToSmeltItem();
+                            // timeInMilis -= smeltableItem.getTimeToSmeltItem();
 
                             //add to coal neeeded
                             coalNeeded += smeltableItem.getCostOfCoalToSmelt();
@@ -505,9 +507,9 @@ public class SmeltManager {
 
                     //This will set the decimal of coal left
                     double decimal = Double.valueOf(df.format(coalNeeded - (int) coalNeeded));
-                    if(decimal > 0){
-                        smeltPlayer.setCoalLeftOver(1-decimal);
-                    }else {
+                    if (decimal > 0) {
+                        smeltPlayer.setCoalLeftOver(1 - decimal);
+                    } else {
                         smeltPlayer.setCoalLeftOver(-decimal);
                     }
                     coalNeeded = Double.valueOf(df.format(coalNeeded));
@@ -537,10 +539,10 @@ public class SmeltManager {
                         }
                         System.out.println("4");
                         //remove coal,raw items &money, give items, update progress bar, check if done
-                        p.getInventory().removeItem(new ItemStack(Material.COAL,(int) (coalNeeded)));
+                        p.getInventory().removeItem(new ItemStack(Material.COAL, (int) (coalNeeded)));
 
 
-                            p.giveExp((int) (expToGive + 0.5));
+                        p.giveExp((int) (expToGive + 0.5));
                         if (Core.economy != null) Core.economy.withdrawPlayer(p, moneyNeeded);
              /*           smeltPlayer.setMilisLeftOver(timeInMilis);
                         System.out.println(timeInMilis);*/
@@ -582,7 +584,6 @@ public class SmeltManager {
     }
 
     /**
-     *
      * @return Returns the users who are actively smelting
      */
     public HashMap<Player, SmeltPlayer> getActivelySmelting() {
@@ -590,7 +591,6 @@ public class SmeltManager {
     }
 
     /**
-     *
      * @return The smeltable item list
      */
     public HashMap<Material, SmeltableItem> getSmeltableItems() {

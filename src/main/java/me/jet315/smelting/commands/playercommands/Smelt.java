@@ -35,7 +35,7 @@ public class Smelt extends CommandExecutor {
         Player player = (Player) sender;
 
         //Check if player is already smelting
-        if (Core.getInstance().getSmeltManager().getActivelySmelting().containsKey(player)){
+        if (Core.getInstance().getSmeltManager().getActivelySmelting().containsKey(player)) {
             player.sendMessage(Core.getInstance().getProperties().getMessages().getAlreadySmeltingMessage());
             return;
         }
@@ -53,18 +53,18 @@ public class Smelt extends CommandExecutor {
             ItemStack item = Core.getInstance().getProperties().getConfirmItem();
             ItemMeta meta = item.getItemMeta();
             String title = Core.getInstance().getProperties().getMessages().getItemConfirmName();
-            meta.setDisplayName(title.replaceAll("%MONEY%","0").replaceAll("%COAL%","0").replaceAll("%EXP","0").replaceAll("%TIME%","0"));
+            meta.setDisplayName(title.replaceAll("%MONEY%", "0").replaceAll("%COAL%", "0").replaceAll("%EXP", "0").replaceAll("%TIME%", "0"));
             //Lore
             ArrayList<String> lore = new ArrayList<>();
             for (String s : Core.getInstance().getProperties().getMessages().getItemConfirmLore()) {
-                String formatted = s.replaceAll("%MONEY%","0").replaceAll("%COAL%","0").replaceAll("%EXP%","0").replaceAll("%TIME%","0");
+                String formatted = s.replaceAll("%MONEY%", "0").replaceAll("%COAL%", "0").replaceAll("%EXP%", "0").replaceAll("%TIME%", "0");
                 lore.add(formatted);
             }
             meta.setLore(lore);
             item.setItemMeta(meta);
             //Open inventory
             Inventory inventory = Core.getInstance().getSmeltingGUI().getSmeltingInventory();
-            inventory.setItem(Core.getInstance().getProperties().getSizeOfInventory()-1,item);
+            inventory.setItem(Core.getInstance().getProperties().getSizeOfInventory() - 1, item);
             player.openInventory(inventory);
             //Add to inventory viewer list
             Core.getInstance().getSmeltingGUI().getPlayersInGUI().add(player);

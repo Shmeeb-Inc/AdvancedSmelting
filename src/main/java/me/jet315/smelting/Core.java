@@ -18,6 +18,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Core extends JavaPlugin {
 
     /**
+     * Vault dependency, needed for Vault, a third party API/Plugin
+     */
+    public static Economy economy = null;
+    /**
      * Plugins instance
      */
     private static Core instance;
@@ -25,21 +29,18 @@ public class Core extends JavaPlugin {
      * Properties class
      */
     private Properties properties;
-
     /**
      * Smelt manager class
      */
     private SmeltManager smeltManager;
-
     /**
      * GUI Class
      */
     private SmeltingGUI smeltingGUI;
 
-    /**
-     * Vault dependency, needed for Vault, a third party API/Plugin
-     */
-    public static Economy economy = null;
+    public static Core getInstance() {
+        return instance;
+    }
 
     public void onEnable() {
         //Just cool knowing how long the plugin takes to enable, in my opinion :)
@@ -58,8 +59,8 @@ public class Core extends JavaPlugin {
             ActionBar.useOld = true;
         }
 
-        smeltManager = new SmeltManager(properties,properties.getRawItems());
-        smeltingGUI = new SmeltingGUI(properties.getSizeOfInventory(),properties.getNameOfInventory());
+        smeltManager = new SmeltManager(properties, properties.getRawItems());
+        smeltingGUI = new SmeltingGUI(properties.getSizeOfInventory(), properties.getNameOfInventory());
 
         //Register events & commands
         registerEvents();
@@ -68,10 +69,9 @@ public class Core extends JavaPlugin {
         //Setup economy
         setupEconomy();
 
-        System.out.println("[AdvancedSmelting] Initializing Complete - Time took " + String.valueOf(System.currentTimeMillis()-startTime) +"Ms\n");
+        System.out.println("[AdvancedSmelting] Initializing Complete - Time took " + (System.currentTimeMillis() - startTime) + "Ms\n");
 
     }
-
 
     public void onDisable() {
         Bukkit.getScheduler().cancelTasks(this);
@@ -95,28 +95,22 @@ public class Core extends JavaPlugin {
         smeltingGUI = null;
 
         properties = new Properties(this);
-        smeltManager = new SmeltManager(properties,properties.getRawItems());
-        smeltingGUI = new SmeltingGUI(properties.getSizeOfInventory(),properties.getNameOfInventory());
+        smeltManager = new SmeltManager(properties, properties.getRawItems());
+        smeltingGUI = new SmeltingGUI(properties.getSizeOfInventory(), properties.getNameOfInventory());
 
     }
 
-
-
     public void registerEvents() {
-        Bukkit.getServer().getPluginManager().registerEvents(new CloseInventory(),this);
-        Bukkit.getServer().getPluginManager().registerEvents(new InventoryClick(),this);
+        Bukkit.getServer().getPluginManager().registerEvents(new CloseInventory(), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new InventoryClick(), this);
     }
 
     public void registerCommands() {
         getCommand("smelt").setExecutor(new CommandHandler());
     }
 
-
     public Properties getProperties() {
         return properties;
-    }
-    public static Core getInstance() {
-        return instance;
     }
 
     public SmeltManager getSmeltManager() {
@@ -124,16 +118,16 @@ public class Core extends JavaPlugin {
     }
 
     private boolean setupEconomy() {
-       try {
-           RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(Economy.class);
-           if (economyProvider != null) {
-               economy = economyProvider.getProvider();
-           }
+        try {
+            RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(Economy.class);
+            if (economyProvider != null) {
+                economy = economyProvider.getProvider();
+            }
 
-           return (economy != null);
-       } catch(NoClassDefFoundError e)  {
-           return false;
-       }
+            return (economy != null);
+        } catch (NoClassDefFoundError e) {
+            return false;
+        }
     }
 
     public SmeltingGUI getSmeltingGUI() {

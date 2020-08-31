@@ -18,12 +18,9 @@ public class SmeltingStartEvent extends Event implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
 
-    private Player player;
-
+    private final Player player;
+    private final SmeltingType smeltingType;
     private ArrayList<ItemStack> itemList = new ArrayList<>();
-
-    private SmeltingType smeltingType;
-
     private boolean isCancelled = false;
 
     public SmeltingStartEvent(Player player, ArrayList<ItemStack> itemList, SmeltingType smeltingType) {
@@ -32,12 +29,12 @@ public class SmeltingStartEvent extends Event implements Cancellable {
         this.smeltingType = smeltingType;
     }
 
-    @Override
-    public HandlerList getHandlers() {
+    public static HandlerList getHandlerList() {
         return handlers;
     }
 
-    public static HandlerList getHandlerList() {
+    @Override
+    public HandlerList getHandlers() {
         return handlers;
     }
 
@@ -51,7 +48,6 @@ public class SmeltingStartEvent extends Event implements Cancellable {
     }
 
     /**
-     *
      * @param b If this is canceled, the plugin will refund items IF the SmeltingType is INVENTORY, else it will not
      */
     @Override
@@ -60,7 +56,6 @@ public class SmeltingStartEvent extends Event implements Cancellable {
     }
 
     /**
-     *
      * @return Gets the items that are going to be smelted, This may return invalid items
      */
     public ArrayList<ItemStack> getItemList() {
@@ -68,7 +63,6 @@ public class SmeltingStartEvent extends Event implements Cancellable {
     }
 
     /**
-     *
      * @param itemList Sets the items that will be smelted
      */
     public void setItemList(ArrayList<ItemStack> itemList) {
@@ -76,7 +70,6 @@ public class SmeltingStartEvent extends Event implements Cancellable {
     }
 
     /**
-     *
      * @return Gets how the Smelting Process was started
      * ALL = All items in inventory
      * Hand = Item in Hand
@@ -88,11 +81,10 @@ public class SmeltingStartEvent extends Event implements Cancellable {
 
 
     /**
-     *
      * @param item The Itemstack that is being checked to see if valid
      * @return True if the itemstack is smeltable, false otherwise
      */
-    public boolean isValidItemStack(ItemStack item){
+    public boolean isValidItemStack(ItemStack item) {
         return Utils.getSmeltedItemStack(item) != null;
     }
 

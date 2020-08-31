@@ -11,7 +11,7 @@ public class SmeltingGUI {
     /**
      * Stores players who are in the GUI
      */
-    private ArrayList<Player> playersInGUI = new ArrayList<>();
+    private final ArrayList<Player> playersInGUI = new ArrayList<>();
 
     /**
      * Smelting Name and Inventory
@@ -20,7 +20,6 @@ public class SmeltingGUI {
     private String inventoryName = "Smelting Inventory";
 
     /**
-     *
      * @param inventorySize The size of the inventory
      * @param inventoryName The name of the inventory
      */
@@ -32,11 +31,11 @@ public class SmeltingGUI {
     /**
      * @return Returns a Smelting Inventory
      */
-    public Inventory getSmeltingInventory(){
-        return Bukkit.createInventory(null,inventorySize, inventoryName);
+    public Inventory getSmeltingInventory() {
+        return Bukkit.createInventory(null, inventorySize, inventoryName);
     }
 
-    public boolean isSmeltingInventory(Inventory inventory){
+    public boolean isSmeltingInventory(Inventory inventory) {
         return inventory.getName().equals(inventoryName) && inventory.getSize() == inventorySize;
     }
 

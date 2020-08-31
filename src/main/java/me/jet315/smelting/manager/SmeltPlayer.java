@@ -18,34 +18,31 @@ public class SmeltPlayer {
     /**
      * Stores the players original Player, location & whether this should be cancled
      */
-    private Player p;
+    private final Player p;
 
-    private Location originalLocation;
+    private final Location originalLocation;
 
     /**
      * Stores the raw items, that are needed to be smelted
      */
-    private ArrayList<ItemStack> rawList;
+    private final ArrayList<ItemStack> rawList;
 
     /**
      * Stores the total time, in milliseconds, needed to complete the operation
      */
-    private int timeToComplete;
-
+    private final int timeToComplete;
+    /**
+     * Stores the total amount of coal needed
+     */
+    private final int totalCoalNeeded;
+    /**
+     * Stores the total amount of money needed
+     */
+    private final int totalMoneyNeeded;
     /**
      * Stores the time that has progressed so far
      */
     private int timeCompleted;
-
-    /**
-     * Stores the total amount of coal needed
-     */
-    private int totalCoalNeeded;
-    /**
-     * Stores the total amount of money needed
-     */
-    private int totalMoneyNeeded;
-
     /**
      * Stores the total amount of coal left over
      */
@@ -57,7 +54,7 @@ public class SmeltPlayer {
     private boolean smelting;
 
     /**
-     *  @param p
+     * @param p
      * @param originalLocation
      * @param rawList
      * @param timeToComplete
@@ -73,8 +70,6 @@ public class SmeltPlayer {
         this.totalCoalNeeded = totalCoalNeeded;
         this.totalMoneyNeeded = totalMoneyNeeded;
     }
-
-
 
 
     public Location getOriginalLocation() {
@@ -93,16 +88,16 @@ public class SmeltPlayer {
         return timeCompleted;
     }
 
+    public void setTimeCompleted(int timeCompleted) {
+        this.timeCompleted = timeCompleted;
+    }
+
     public int getTotalCoalNeeded() {
         return totalCoalNeeded;
     }
 
     public int getTotalMoneyNeeded() {
         return totalMoneyNeeded;
-    }
-
-    public void setTimeCompleted(int timeCompleted) {
-        this.timeCompleted = timeCompleted;
     }
 
     public double getCoalLeftOver() {

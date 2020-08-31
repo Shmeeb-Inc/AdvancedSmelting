@@ -10,18 +10,17 @@ import java.util.ArrayList;
 /**
  * Created by Jet on 06/03/2018.
  */
-public class Messages{
+public class Messages {
 
     /**
      * Stores the main instance
      */
-    private Core instance;
-
+    private final Core instance;
+    private final ArrayList<String> itemConfirmLore = new ArrayList<>();
     /**
      * Configuration file
      */
     private YamlConfiguration messagesFile;
-
     /**
      * Messages
      */
@@ -41,36 +40,35 @@ public class Messages{
     private String noItemInGUIMessage = "No valid items!";
     //Item Confirm buttons
     private String itemConfirmName = "Confirm!";
-    private ArrayList<String> itemConfirmLore = new ArrayList<>();
 
-    public Messages(Core instance){
+    public Messages(Core instance) {
         this.instance = instance;
         createConfig();
         loadConfig();
     }
 
-    private void loadConfig(){
-        invalidItemMessage = ChatColor.translateAlternateColorCodes('&',messagesFile.getString("InvalidSmeltingItem"));
-        noPermission = ChatColor.translateAlternateColorCodes('&',messagesFile.getString("NoPermission"));
-        noItemPermission = ChatColor.translateAlternateColorCodes('&',messagesFile.getString("NoItemPermission"));
-        notEnoughMoney = ChatColor.translateAlternateColorCodes('&',messagesFile.getString("NotEnoughMoney"));
-        notEnoughCoal = ChatColor.translateAlternateColorCodes('&',messagesFile.getString("NotEnoughCoal"));
-        smeltStartMessage = ChatColor.translateAlternateColorCodes('&',messagesFile.getString("SmeltStartMessage"));
-        smeltCompletedMessage = ChatColor.translateAlternateColorCodes('&',messagesFile.getString("SmeltCompletedMessage"));
-        moveCancelMessage = ChatColor.translateAlternateColorCodes('&',messagesFile.getString("MoveCancelMessage"));
-        unknownCommand = ChatColor.translateAlternateColorCodes('&',messagesFile.getString("UnknownCommand"));
-        consoleCommand = ChatColor.translateAlternateColorCodes('&',messagesFile.getString("ConsoleOnlyCommand"));
-        playerCommand = ChatColor.translateAlternateColorCodes('&',messagesFile.getString("PlayerOnlyCommand"));
-        alreadySmeltingMessage = ChatColor.translateAlternateColorCodes('&',messagesFile.getString("AlreadySmeltingMessage"));
-        actionBarMessage = ChatColor.translateAlternateColorCodes('&',messagesFile.getString("ActionBarMessage"));
-        itemConfirmName = ChatColor.translateAlternateColorCodes('&',messagesFile.getString("ConfirmItemName"));
-        noItemInGUIMessage = ChatColor.translateAlternateColorCodes('&',messagesFile.getString("NoItemInGUIMessage"));
-        for(Object s : messagesFile.getList("ConfirmLore")){
-            itemConfirmLore.add(ChatColor.translateAlternateColorCodes('&',s.toString()));
+    private void loadConfig() {
+        invalidItemMessage = ChatColor.translateAlternateColorCodes('&', messagesFile.getString("InvalidSmeltingItem"));
+        noPermission = ChatColor.translateAlternateColorCodes('&', messagesFile.getString("NoPermission"));
+        noItemPermission = ChatColor.translateAlternateColorCodes('&', messagesFile.getString("NoItemPermission"));
+        notEnoughMoney = ChatColor.translateAlternateColorCodes('&', messagesFile.getString("NotEnoughMoney"));
+        notEnoughCoal = ChatColor.translateAlternateColorCodes('&', messagesFile.getString("NotEnoughCoal"));
+        smeltStartMessage = ChatColor.translateAlternateColorCodes('&', messagesFile.getString("SmeltStartMessage"));
+        smeltCompletedMessage = ChatColor.translateAlternateColorCodes('&', messagesFile.getString("SmeltCompletedMessage"));
+        moveCancelMessage = ChatColor.translateAlternateColorCodes('&', messagesFile.getString("MoveCancelMessage"));
+        unknownCommand = ChatColor.translateAlternateColorCodes('&', messagesFile.getString("UnknownCommand"));
+        consoleCommand = ChatColor.translateAlternateColorCodes('&', messagesFile.getString("ConsoleOnlyCommand"));
+        playerCommand = ChatColor.translateAlternateColorCodes('&', messagesFile.getString("PlayerOnlyCommand"));
+        alreadySmeltingMessage = ChatColor.translateAlternateColorCodes('&', messagesFile.getString("AlreadySmeltingMessage"));
+        actionBarMessage = ChatColor.translateAlternateColorCodes('&', messagesFile.getString("ActionBarMessage"));
+        itemConfirmName = ChatColor.translateAlternateColorCodes('&', messagesFile.getString("ConfirmItemName"));
+        noItemInGUIMessage = ChatColor.translateAlternateColorCodes('&', messagesFile.getString("NoItemInGUIMessage"));
+        for (Object s : messagesFile.getList("ConfirmLore")) {
+            itemConfirmLore.add(ChatColor.translateAlternateColorCodes('&', s.toString()));
         }
     }
 
-    private void createConfig(){
+    private void createConfig() {
         try {
             if (!instance.getDataFolder().exists()) {
                 instance.getDataFolder().mkdirs();
@@ -78,7 +76,7 @@ public class Messages{
             File file = new File(instance.getDataFolder(), "messages.yml");
             if (!file.exists()) {
                 instance.getLogger().info("messages.yml not found, creating!");
-                instance.saveResource("messages.yml",false);
+                instance.saveResource("messages.yml", false);
             } else {
                 instance.getLogger().info("messages.yml found, loading!");
             }

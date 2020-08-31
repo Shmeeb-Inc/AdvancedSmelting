@@ -14,7 +14,7 @@ public class SmeltingInventoryOpenEvent extends Event implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
 
-    private Player player;
+    private final Player player;
 
 
     private boolean isCancelled = false;
@@ -38,7 +38,6 @@ public class SmeltingInventoryOpenEvent extends Event implements Cancellable {
     }
 
     /**
-     *
      * @param b If this is canceled, the plugin will refund items IF the SmeltingType is INVENTORY, else it will not
      */
     @Override

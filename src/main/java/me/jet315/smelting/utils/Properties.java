@@ -18,44 +18,37 @@ public class Properties {
     /**
      * Stores plugin instance
      */
-    private Core instance;
-
-
+    private final Core instance;
+    /**
+     * Stores the valid raw items list
+     */
+    private final ArrayList<SmeltableItem> rawItems = new ArrayList<>();
+    /**
+     * Stores messages
+     */
+    private final Messages messages;
     /**
      * Action bar
      */
     private boolean isActionBarEnabled = true;
-
     /**
      * Stores whether the smelting should stop if the player moves
      */
     private boolean cancelSmeltingOnMove = true;
-
     /**
      * Stores whether an inventory should be used, and the name of it + size
      */
     private boolean inventoryEnabled = true;
     private String nameOfInventory = ChatColor.GRAY + "Smelting";
     private int sizeOfInventory = 27;
-    private ItemStack confirmItem = new ItemStack(Material.STAINED_GLASS_PANE,0,(byte) 5);
-
+    private ItemStack confirmItem = new ItemStack(Material.STAINED_GLASS_PANE, 0, (byte) 5);
     /**
      * Whether Individual Smelting Permissions should be used
      */
     private boolean individualSmeltingPermission = false;
     private boolean showInvalidItemPermissions = true;
 
-    /**
-     * Stores the valid raw items list
-     */
-    private ArrayList<SmeltableItem> rawItems = new ArrayList<>();
-
-    /**
-     * Stores messages
-     */
-    private Messages messages;
-
-    public Properties(Core instance){
+    public Properties(Core instance) {
         this.instance = instance;
 
         messages = new Messages(instance);
@@ -69,27 +62,27 @@ public class Properties {
         cancelSmeltingOnMove = config.getBoolean("cancelSmeltingOnMove");
         inventoryEnabled = config.getBoolean("EnableSmeltInventory");
         showInvalidItemPermissions = config.getBoolean("ShowInvalidItemPermissions");
-        nameOfInventory = ChatColor.translateAlternateColorCodes('&',config.getString("NameOfSmeltInventory"));
+        nameOfInventory = ChatColor.translateAlternateColorCodes('&', config.getString("NameOfSmeltInventory"));
         individualSmeltingPermission = config.getBoolean("IndividualSmeltingPermissions");
         sizeOfInventory = config.getInt("SizeOfSmeltInventory");
 
-         String confirmItemArray[] = config.getString("ConfirmItemID").split(":");
-         confirmItem = new ItemStack(Material.getMaterial(confirmItemArray[0]),1, Byte.valueOf(confirmItemArray[1]));
+        String[] confirmItemArray = config.getString("ConfirmItemID").split(":");
+        confirmItem = new ItemStack(Material.getMaterial(confirmItemArray[0]), 1, Byte.valueOf(confirmItemArray[1]));
 
-            for(String item : config.getConfigurationSection("Items").getKeys(false)){
-                byte data = (byte) config.getInt("Items."+item+".Data");
-                double expToGive = config.getDouble("Items."+item+".ExpToGive");
-                int timeToSmelt = config.getInt("Items."+item+".TimeToSmelt");
-                double costOfCoalToSmelt = config.getDouble("Items."+item+".CostOfCoalToSmelt");
-                double costOfMoneyToSmelt = config.getDouble("Items."+"PORK"+".CostOfMoneyToSmelt");
-                SmeltableItem smeltableItem = new SmeltableItem(item,data,expToGive,timeToSmelt,costOfCoalToSmelt,costOfMoneyToSmelt);
-                if(smeltableItem.validate()){
-                    this.rawItems.add(smeltableItem);
-                }else{
-                    System.out.println("AdvancedSmithing > Configuration error on the item " + item);
-                }
-
+        for (String item : config.getConfigurationSection("Items").getKeys(false)) {
+            byte data = (byte) config.getInt("Items." + item + ".Data");
+            double expToGive = config.getDouble("Items." + item + ".ExpToGive");
+            int timeToSmelt = config.getInt("Items." + item + ".TimeToSmelt");
+            double costOfCoalToSmelt = config.getDouble("Items." + item + ".CostOfCoalToSmelt");
+            double costOfMoneyToSmelt = config.getDouble("Items." + "PORK" + ".CostOfMoneyToSmelt");
+            SmeltableItem smeltableItem = new SmeltableItem(item, data, expToGive, timeToSmelt, costOfCoalToSmelt, costOfMoneyToSmelt);
+            if (smeltableItem.validate()) {
+                this.rawItems.add(smeltableItem);
+            } else {
+                System.out.println("AdvancedSmithing > Configuration error on the item " + item);
             }
+
+        }
 
 
     }
@@ -111,7 +104,6 @@ public class Properties {
 
         }
     }
-
 
 
     public Messages getMessages() {

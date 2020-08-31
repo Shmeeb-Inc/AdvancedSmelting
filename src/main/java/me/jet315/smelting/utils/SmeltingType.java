@@ -1,3 +1,3 @@
 package me.jet315.smelting.utils;
 
-public enum SmeltingType { ALL,INVENTORY,HAND }
+public enum SmeltingType {ALL, INVENTORY, HAND}

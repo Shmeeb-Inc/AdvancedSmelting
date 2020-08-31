@@ -17,7 +17,7 @@ public abstract class CommandExecutor {
         this.console = true;
     }
 
-    public boolean isBoth(){
+    public boolean isBoth() {
         return player && console;
     }
 

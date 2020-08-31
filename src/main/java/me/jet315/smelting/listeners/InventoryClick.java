@@ -14,23 +14,23 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 
-public class InventoryClick implements Listener{
+public class InventoryClick implements Listener {
 
     @EventHandler
-    public void onClick(InventoryClickEvent e){
+    public void onClick(InventoryClickEvent e) {
         //Check if moving to the Smelting inventory
         if (e.getClickedInventory() == null) return;
         if (Core.getInstance().getSmeltingGUI().isSmeltingInventory(e.getInventory())) {
             Player p = (Player) e.getWhoClicked();
-            int getLastSlot = e.getInventory().getSize()-1;
-            if(e.getCurrentItem() != null && e.getSlot() == getLastSlot){
-                e.getInventory().setItem(getLastSlot,null);
+            int getLastSlot = e.getInventory().getSize() - 1;
+            if (e.getCurrentItem() != null && e.getSlot() == getLastSlot) {
+                e.getInventory().setItem(getLastSlot, null);
                 ArrayList<ItemStack> itemsToSmelt = new ArrayList<>();
-                for(ItemStack itemStack : e.getInventory().getContents()){
-                    if(itemStack == null) continue;
+                for (ItemStack itemStack : e.getInventory().getContents()) {
+                    if (itemStack == null) continue;
                     itemsToSmelt.add(new ItemStack(itemStack));
                 }
-                Core.getInstance().getSmeltManager().smeltItems(p,itemsToSmelt, SmeltingType.INVENTORY);
+                Core.getInstance().getSmeltManager().smeltItems(p, itemsToSmelt, SmeltingType.INVENTORY);
                 Core.getInstance().getSmeltingGUI().getPlayersInGUI().remove(p);
                 p.closeInventory();
                 e.setCancelled(true);
@@ -42,30 +42,30 @@ public class InventoryClick implements Listener{
         }
     }
 
-    public void updateInventoryPrice(Inventory inventory){
+    public void updateInventoryPrice(Inventory inventory) {
         Bukkit.getScheduler().runTaskLater(Core.getInstance(), new Runnable() {
             @Override
             public void run() {
-                int getLastSlot = inventory.getSize()-1;
+                int getLastSlot = inventory.getSize() - 1;
                 String[] costs = Utils.calcInveotryCosts(inventory.getContents());
                 //Get the confirm item
                 ItemStack confirmItem = inventory.getItem(getLastSlot);
-                if(confirmItem == null) return;
+                if (confirmItem == null) return;
                 //Set the confirm items name, and lore
                 ItemMeta confirmItemMeta = confirmItem.getItemMeta();
                 String title = Core.getInstance().getProperties().getMessages().getItemConfirmName();
-                confirmItemMeta.setDisplayName(title.replaceAll("%MONEY%",costs[0]).replaceAll("%COAL%",costs[1]).replaceAll("%EXP",costs[2]).replaceAll("%TIME%",costs[3]));
+                confirmItemMeta.setDisplayName(title.replaceAll("%MONEY%", costs[0]).replaceAll("%COAL%", costs[1]).replaceAll("%EXP", costs[2]).replaceAll("%TIME%", costs[3]));
                 //Lore
                 ArrayList<String> lore = new ArrayList<>();
-                for(String s : Core.getInstance().getProperties().getMessages().getItemConfirmLore()){
-                    String formatted = s.replaceAll("%MONEY%",costs[0]).replaceAll("%COAL%",costs[1]).replaceAll("%EXP%",costs[2]).replaceAll("%TIME%",costs[3]);
+                for (String s : Core.getInstance().getProperties().getMessages().getItemConfirmLore()) {
+                    String formatted = s.replaceAll("%MONEY%", costs[0]).replaceAll("%COAL%", costs[1]).replaceAll("%EXP%", costs[2]).replaceAll("%TIME%", costs[3]);
                     lore.add(formatted);
                 }
                 confirmItemMeta.setLore(lore);
                 confirmItem.setItemMeta(confirmItemMeta);
-                inventory.setItem(getLastSlot,confirmItem);
+                inventory.setItem(getLastSlot, confirmItem);
             }
-        },10L);
+        }, 10L);
     }
 
 }

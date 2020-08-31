@@ -14,7 +14,6 @@ import java.util.ArrayList;
 public class Utils {
 
     /**
-     *
      * @param itemStack The raw item
      * @return The smelted itemStack, returns null if invalid item
      */
@@ -119,7 +118,6 @@ public class Utils {
     }
 
     /**
-     *
      * @param items Each item in the inventory
      * @return Four Doubles, Money[0], Coal[1], EXP[2],time[3] in the format #.##
      */
@@ -147,12 +145,12 @@ public class Utils {
             time += smeltableItem.getTimeToSmeltItem() * validItem.getAmount();
         }
         costs[0] = df.format(moneyCost);
-        costs[1] = df.format((int)(coalCost+0.999));
+        costs[1] = df.format((int) (coalCost + 0.999));
         costs[2] = df.format(expGained);
-        costs[3] = timeDF.format(time/1000);
+        costs[3] = timeDF.format(time / 1000);
 
 
-       // smeltPlayer.setCoalLeftOver(Double.valueOf(df.format(1-(coal-(int)coal))));
+        // smeltPlayer.setCoalLeftOver(Double.valueOf(df.format(1-(coal-(int)coal))));
 
         return costs;
     }

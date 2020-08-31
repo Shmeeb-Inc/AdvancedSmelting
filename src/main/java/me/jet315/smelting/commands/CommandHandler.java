@@ -19,7 +19,7 @@ import java.util.Map;
  */
 public class CommandHandler implements org.bukkit.command.CommandExecutor {
 
-    private Map<String, CommandExecutor> commands = new HashMap<String, CommandExecutor>();
+    private final Map<String, CommandExecutor> commands = new HashMap<String, CommandExecutor>();
 
     public CommandHandler() {
         //Player commands
@@ -30,18 +30,19 @@ public class CommandHandler implements org.bukkit.command.CommandExecutor {
 
         //Admin commands
     }
+
     public boolean onCommand(CommandSender sender, Command cmd, String s, String[] args) {
 
         if (cmd.getName().equalsIgnoreCase("smelt")) {
             if (args.length == 0) {
-                if (sender instanceof Player){
+                if (sender instanceof Player) {
                     final CommandExecutor command = commands.get("smelt");
-                        if (command.getPermission() != null && !sender.hasPermission(command.getPermission())) {
-                            sender.sendMessage(Core.getInstance().getProperties().getMessages().getNoPermission());
-                            return true;
-                        }
-                        command.execute(sender, args);
+                    if (command.getPermission() != null && !sender.hasPermission(command.getPermission())) {
+                        sender.sendMessage(Core.getInstance().getProperties().getMessages().getNoPermission());
                         return true;
+                    }
+                    command.execute(sender, args);
+                    return true;
 
                 } else {
                     sender.sendMessage(Core.getInstance().getProperties().getMessages().getPlayerCommand());
