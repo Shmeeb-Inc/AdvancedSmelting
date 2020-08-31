@@ -21,20 +21,20 @@ import java.util.HashMap;
  */
 public class SmeltManager {
 
-    private HashMap<Player, SmeltPlayer> activelySmelting = new HashMap<>();
-    private HashMap<Material, SmeltableItem> smeltableItems = new HashMap<>();
+    private final HashMap<Player, SmeltPlayer> activelySmelting = new HashMap<>();
+    private final HashMap<Material, SmeltableItem> smeltableItems = new HashMap<>();
 
     /**
      * Action bar related varibles
      * var milisInRefreshRate relates to the amount of milliseconds in the refresh rate, this is needed as it is used to calculate the amount of items it can process per 'clock tick'
      */
-    private int refreshRate;
-    private boolean cancelOnMove;
+    private final int refreshRate;
+    private final boolean cancelOnMove;
 
     /**
      * The decimal format
      */
-    private DecimalFormat df = new DecimalFormat("#.##");
+    private final DecimalFormat df = new DecimalFormat("#.##");
 
     public SmeltManager(Properties properties, ArrayList<SmeltableItem> smeltableItems) {
         for (SmeltableItem item : smeltableItems) {
@@ -122,7 +122,16 @@ public class SmeltManager {
             } else if (!(Core.economy.getBalance(p) >= totalCost)) {
                 p.sendMessage(Core.getInstance().getProperties().getMessages().getNotEnoughMoney().replaceAll("%DIFFERENCE%", String.valueOf(totalCost - Core.economy.getBalance(p))));
                 //Need to give items back -  Items are given back by the Inventory Close Event if
-                if(type != SmeltingType.INVENTORY) refundItems(p,validItems);
+                if (type != SmeltingType.INVENTORY) {
+                    if (type == SmeltingType.ALL)
+                        validItems.forEach(itemStack -> p.getInventory().remove(itemStack));
+
+                    if (type == SmeltingType.HAND)
+                        p.getInventory().setItemInHand(null);
+
+
+                    refundItems(p, validItems);
+                }
                 return;
             }
         }
@@ -138,17 +147,31 @@ public class SmeltManager {
                 if (coalDifference == 0) coalDifference = 1;
                 p.sendMessage(Core.getInstance().getProperties().getMessages().getNotEnoughCoal().replaceAll("%DIFFERENCE%", String.valueOf(coalDifference)));
                 //Need to give items back - Items are given back by the Inventory Close Event if
-                if(type != SmeltingType.INVENTORY) refundItems(p,validItems);
+                if (type != SmeltingType.INVENTORY) {
+                    if (type == SmeltingType.ALL)
+                        validItems.forEach(itemStack -> p.getInventory().remove(itemStack));
+
+                    if (type == SmeltingType.HAND)
+                        p.getInventory().setItemInHand(null);
+
+                    refundItems(p, validItems);
+                }
 
                 return;
             }
         }
 
-        if(nullItems.size() > 0){
-            for(ItemStack item : nullItems){
+        if (nullItems.size() > 0) {
+            for (ItemStack item : nullItems) {
                 p.getInventory().addItem(item);
             }
         }
+
+        if (type == SmeltingType.ALL)
+            validItems.forEach(itemStack -> p.getInventory().remove(itemStack));
+
+        if (type == SmeltingType.HAND)
+            p.getInventory().setItemInHand(null);
 
         p.sendMessage(Core.getInstance().getProperties().getMessages().getSmeltStartMessage());
         SmeltPlayer smeltPlayer = new SmeltPlayer(p, p.getLocation(), validItems, (int) totalTimeInMillisecondsToSmelt, (int) (totalCoalNeeded + 0.98), (int) (totalCost + 0.5));
@@ -164,92 +187,90 @@ public class SmeltManager {
     //Work out how many items I can smelt in one coal, put coal leftover into a varible to use next time
     //Pass these items into a async method, which then after the time specified, calls  back to a sync method with an array of items to give
 
-    private void startClock(){
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(Core.getInstance(), new Runnable() {
-            @Override
-            public void run() {
-                //Iterate through the keyset
-                for(Player p : activelySmelting.keySet()){
+    private void startClock() {
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(Core.getInstance(), () -> {
+            //Iterate through the keyset
+            for (Player p : activelySmelting.keySet()) {
 
-                    //Ensure player is online
-                    if(!p.isOnline()){
-                        activelySmelting.remove(p);
-                        continue;
-                    }
-
-                    //Get the SmeltPlayer object and the items this person wishes to smelt
-                    SmeltPlayer smeltPlayer = activelySmelting.get(p);
-
-                    //Check if a smelting operation is already happening
-
-                    if(smeltPlayer.isSmelting()) continue;
-
-                    smeltPlayer.setSmelting(true);
-
-                    ArrayList<ItemStack> itemsToSmelt =  smeltPlayer.getRawList();
-
-                    //Work out how many items to give for one coal, any coal over one should be put into smeltPlayers.leftOverCoal as a positive
-                    //Check if player has that one coal, else send message
-                    //check if player has the required money, else send message
-
-                    //If player has coal&money, remove the about-to-be smelted items from the smeltPlayer.getRawList
-
-                    //If item list == 0
-
-                    //As coal left over will be positive, if I make it negative it will mean there is > 1 coal remaining as '1' is the maximum I can have
-                    double coal = -(smeltPlayer.getCoalLeftOver());
-                    //The number of milliseconds needed to wait, to process items
-                    int numberOfMillisecondsToWait = 0;
-                    double moneyToCharge = 0;
-                    double expToGive = 0;
-
-                    //Stores the items that need to be smelted
-                    ArrayList<ItemStack> validItemsToSmelt = new ArrayList<>();
-
-                    //Loop through items
-                    INNER:for (ItemStack item : itemsToSmelt) {
-
-                        //Get the material
-                        Material material = item.getType();
-                        //Get the smeltable item
-                        SmeltableItem smeltableItem = smeltableItems.get(material);
-                        //This value stores the number of items processed
-                        int numberOfItemsProcessed = 0;
-
-                        //This smelts the amount of items, allowed in the milliseconds given
-                        INNERWHILE:
-                        while (item.getAmount()-numberOfItemsProcessed !=0 && coal < 2) {
-
-                            coal += smeltableItem.getCostOfCoalToSmelt();
-
-                            //reduce the time in milis, reduce item amount, add to number of items processed
-
-                            numberOfMillisecondsToWait += smeltableItem.getTimeToSmeltItem();
-
-
-                            //Adds to the total coal needed to perform the operation
-                            moneyToCharge += smeltableItem.getCostOfMoneyToSmelt();
-                            expToGive += smeltableItem.getExpToGive();
-
-                            numberOfItemsProcessed++;
-                        }
-
-                        //Add to valid array
-                        validItemsToSmelt.add(new ItemStack(material,numberOfItemsProcessed));
-
-                        break;
-                    }
-                    coal = Double.valueOf(df.format(coal));
-                    //Check if whole number
-                    if(!(coal % 1 == 0)){
-
-                        smeltPlayer.setCoalLeftOver(Double.valueOf(df.format(1-(coal-(int)coal))));
-                    }else{
-                        smeltPlayer.setCoalLeftOver(0);
-                    }
-
-                    delayItems(p,numberOfMillisecondsToWait,validItemsToSmelt,(int) (coal+0.99),moneyToCharge,expToGive);
+                //Ensure player is online
+                if (!p.isOnline()) {
+                    activelySmelting.remove(p);
+                    continue;
                 }
+
+                //Get the SmeltPlayer object and the items this person wishes to smelt
+                SmeltPlayer smeltPlayer = activelySmelting.get(p);
+
+                //Check if a smelting operation is already happening
+
+                if (smeltPlayer.isSmelting()) continue;
+
+                smeltPlayer.setSmelting(true);
+
+                ArrayList<ItemStack> itemsToSmelt = smeltPlayer.getRawList();
+
+                //Work out how many items to give for one coal, any coal over one should be put into smeltPlayers.leftOverCoal as a positive
+                //Check if player has that one coal, else send message
+                //check if player has the required money, else send message
+
+                //If player has coal&money, remove the about-to-be smelted items from the smeltPlayer.getRawList
+
+                //If item list == 0
+
+                //As coal left over will be positive, if I make it negative it will mean there is > 1 coal remaining as '1' is the maximum I can have
+                double coal = -(smeltPlayer.getCoalLeftOver());
+                //The number of milliseconds needed to wait, to process items
+                int numberOfMillisecondsToWait = 0;
+                double moneyToCharge = 0;
+                double expToGive = 0;
+
+                //Stores the items that need to be smelted
+                ArrayList<ItemStack> validItemsToSmelt = new ArrayList<>();
+
+                //Loop through items
+                INNER:
+                for (ItemStack item : itemsToSmelt) {
+
+                    //Get the material
+                    Material material = item.getType();
+                    //Get the smeltable item
+                    SmeltableItem smeltableItem = smeltableItems.get(material);
+                    //This value stores the number of items processed
+                    int numberOfItemsProcessed = 0;
+
+                    //This smelts the amount of items, allowed in the milliseconds given
+                    INNERWHILE:
+                    while (item.getAmount() - numberOfItemsProcessed != 0 && coal < 2) {
+
+                        coal += smeltableItem.getCostOfCoalToSmelt();
+
+                        //reduce the time in milis, reduce item amount, add to number of items processed
+
+                        numberOfMillisecondsToWait += smeltableItem.getTimeToSmeltItem();
+
+
+                        //Adds to the total coal needed to perform the operation
+                        moneyToCharge += smeltableItem.getCostOfMoneyToSmelt();
+                        expToGive += smeltableItem.getExpToGive();
+
+                        numberOfItemsProcessed++;
+                    }
+
+                    //Add to valid array
+                    validItemsToSmelt.add(new ItemStack(material, numberOfItemsProcessed));
+
+                    break;
+                }
+                coal = Double.valueOf(df.format(coal));
+                //Check if whole number
+                if (!(coal % 1 == 0)) {
+
+                    smeltPlayer.setCoalLeftOver(Double.valueOf(df.format(1 - (coal - (int) coal))));
+                } else {
+                    smeltPlayer.setCoalLeftOver(0);
+                }
+
+                delayItems(p, numberOfMillisecondsToWait, validItemsToSmelt, (int) (coal + 0.99), moneyToCharge, expToGive);
             }
         },0L, refreshRate); //Change refresh rate,probably no need to have config
     }
