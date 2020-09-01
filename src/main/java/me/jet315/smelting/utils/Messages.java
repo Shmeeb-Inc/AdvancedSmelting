@@ -38,6 +38,8 @@ public class Messages {
     private String alreadySmeltingMessage = "You are already smelting!";
     private String actionBarMessage = "%PERCENTAGE%";
     private String noItemInGUIMessage = "No valid items!";
+    private String noItemMessage = "No valid items!";
+
     //Item Confirm buttons
     private String itemConfirmName = "Confirm!";
 
@@ -63,6 +65,7 @@ public class Messages {
         actionBarMessage = ChatColor.translateAlternateColorCodes('&', messagesFile.getString("ActionBarMessage"));
         itemConfirmName = ChatColor.translateAlternateColorCodes('&', messagesFile.getString("ConfirmItemName"));
         noItemInGUIMessage = ChatColor.translateAlternateColorCodes('&', messagesFile.getString("NoItemInGUIMessage"));
+        noItemMessage = ChatColor.translateAlternateColorCodes('&', messagesFile.getString("NoItemMessage"));
         for (Object s : messagesFile.getList("ConfirmLore")) {
             itemConfirmLore.add(ChatColor.translateAlternateColorCodes('&', s.toString()));
         }
@@ -153,5 +156,9 @@ public class Messages {
 
     public String getNoItemInGUIMessage() {
         return noItemInGUIMessage;
+    }
+
+    public String getNoItemMessage() {
+        return noItemMessage;
     }
 }

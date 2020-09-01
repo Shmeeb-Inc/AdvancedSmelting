@@ -10,6 +10,8 @@ NoPermission: '&3Smelt &7» &cYou do not have permission!'
 NoItemPermission: '&3Smelt &7» &cYou do not have permission to smelt the item %ITEM%'
 #The message that is shown when the user puts no items in the inventory, and clicks the confirm button
 NoItemInGUIMessage: '&3Smelt &7» &cYou put no valid items in the GUI!'
+#The message that is shown when the user has no valid items in their inventory and tries to smelt
+NoItemMessage: '&3Smelt &7» &cYou have no valid items in your inventory!'
 #Shown when the player starts smelting
 SmeltStartMessage: '&3Smelt &7» &aSmelting Started!'
 #Shown when the player completes the smelting process - %COAL% replaces the total coal used, %MONEY% replaces the total money used

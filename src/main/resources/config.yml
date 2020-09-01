@@ -171,15 +171,3 @@ Items:
     TimeToSmelt: 40
     CostOfCoalToSmelt: 0.2
     CostOfMoneyToSmelt: 4
-  SPONGE:
-    Data: 1
-    ExpToGive: 0.2
-    TimeToSmelt: 40
-    CostOfCoalToSmelt: 0.2
-    CostOfMoneyToSmelt: 6
-  CHORUS_FRUIT:
-    Data: 0
-    ExpToGive: 0.4
-    TimeToSmelt: 40
-    CostOfCoalToSmelt: 0.2
-    CostOfMoneyToSmelt: 5

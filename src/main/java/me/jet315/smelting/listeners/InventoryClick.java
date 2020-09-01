@@ -47,7 +47,7 @@ public class InventoryClick implements Listener {
             @Override
             public void run() {
                 int getLastSlot = inventory.getSize() - 1;
-                String[] costs = Utils.calcInveotryCosts(inventory.getContents());
+                String[] costs = Utils.calcInventoryCosts(inventory.getContents());
                 //Get the confirm item
                 ItemStack confirmItem = inventory.getItem(getLastSlot);
                 if (confirmItem == null) return;

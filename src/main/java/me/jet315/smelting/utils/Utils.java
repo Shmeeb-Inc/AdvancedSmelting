@@ -45,7 +45,6 @@ public class Utils {
             case POTATO_ITEM: {
                 return new ItemStack(Material.BAKED_POTATO, itemStack.getAmount());
             }
-
             case IRON_ORE: {
                 return new ItemStack(Material.IRON_INGOT, itemStack.getAmount());
             }
@@ -98,11 +97,10 @@ public class Utils {
                 return new ItemStack(Material.INK_SACK, itemStack.getAmount(), (short) 2);
             }
             case SPONGE: {
-                if (itemStack.getDurability() == 0) {
-                    return null;
+                if (itemStack.getDurability() == 1) {
+                    return new ItemStack(Material.SPONGE, itemStack.getAmount());
                 }
-
-                return new ItemStack(Material.SPONGE, itemStack.getAmount());
+                return null;
             }
             /*
             Not an item in 1.8
@@ -121,7 +119,7 @@ public class Utils {
      * @param items Each item in the inventory
      * @return Four Doubles, Money[0], Coal[1], EXP[2],time[3] in the format #.##
      */
-    public static String[] calcInveotryCosts(ItemStack[] items) {
+    public static String[] calcInventoryCosts(ItemStack[] items) {
         DecimalFormat df = new DecimalFormat("#.##");
         DecimalFormat timeDF = new DecimalFormat("#.#");
         String[] costs = new String[4];
